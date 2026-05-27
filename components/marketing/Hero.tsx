@@ -10,10 +10,11 @@ export default function Hero() {
 
   /* ── Particle Network ── */
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
+    const canvasEl = canvasRef.current
+    if (!canvasEl) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
+    const canvas: HTMLCanvasElement = canvasEl
     const ctx = canvas.getContext('2d')!
     let W = 0, H = 0
     const mouse = { x: 0, y: 0 }
