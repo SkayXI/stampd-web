@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { QrScanIcon } from './WalletBrandIcons'
 
 const barHeights = [50, 72, 60, 88, 70, 100, 82]
 
@@ -19,8 +20,8 @@ export default function Showcase() {
 
         <div className="bento">
 
-          {/* Wide: Stamp card mockup */}
-          <div className="bc wide rv d1">
+          {/* Wallet Pass */}
+          <div className="bc rv d1">
             <div className="bc-tag">Wallet Pass</div>
             <h3 className="bc-title">Your brand, permanently in their pocket</h3>
             <p className="bc-desc">
@@ -57,18 +58,18 @@ export default function Showcase() {
             </div>
           </div>
 
-          {/* Tall: Analytics */}
-          <div className="bc tall rv d2">
+          {/* Analytics */}
+          <div className="bc rv d2">
             <div className="bc-tag">Analytics</div>
             <h3 className="bc-title">Know your regulars, grow your revenue</h3>
             <p className="bc-desc">
               Real-time dashboard: active cards, stamps today, rewards redeemed, and
               top returning customers.
             </p>
-            <div className="bc-visual">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-m)' }}>Stamps issued</span>
-                <span style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600 }}>↑ 24% this week</span>
+            <div className="bc-visual bc-visual--chart">
+              <div className="chart-header">
+                <span className="chart-label">Stamps issued</span>
+                <span className="chart-trend">↑ 24% this week</span>
               </div>
               <div className="graph-wrap">
                 {barHeights.map((h, i) => (
@@ -78,6 +79,20 @@ export default function Showcase() {
                     style={{ height: `${h}%`, animationDelay: `${i * 0.12}s` }}
                   />
                 ))}
+              </div>
+              <div className="chart-stats">
+                <div className="chart-stat">
+                  <span className="chart-stat-val">248</span>
+                  <span className="chart-stat-lbl">Today</span>
+                </div>
+                <div className="chart-stat">
+                  <span className="chart-stat-val">1.2k</span>
+                  <span className="chart-stat-lbl">This week</span>
+                </div>
+                <div className="chart-stat">
+                  <span className="chart-stat-val">89%</span>
+                  <span className="chart-stat-lbl">Return rate</span>
+                </div>
               </div>
             </div>
           </div>
@@ -90,7 +105,7 @@ export default function Showcase() {
               Send a personalized offer to every customer. They get a message, you get
               foot traffic.
             </p>
-            <div className="bc-visual" style={{ padding: '14px' }}>
+            <div className="bc-visual bc-visual--wa">
               <div className="wa-bubble">
                 <div className="wa-name">Stampd Campaign Preview</div>
                 <p>
@@ -99,9 +114,7 @@ export default function Showcase() {
                 </p>
                 <div className="wa-time">Delivered · Read ✓✓</div>
               </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-m)', textAlign: 'center', marginTop: '8px' }}>
-                87 customers · sent in 2 mins
-              </div>
+              <div className="wa-meta">87 customers · sent in 2 mins</div>
             </div>
           </div>
 
@@ -113,19 +126,56 @@ export default function Showcase() {
               Customers scan a QR code once and the card lands in their Wallet
               instantly. That&apos;s it.
             </p>
-            <div
-              className="bc-visual"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', minHeight: '80px' }}
-            >
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '30px', marginBottom: '4px' }}>🍎</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-m)' }}>Apple Wallet</div>
+            <div className="bc-visual wallet-flow-visual">
+              <div className="wallet-flow">
+                <div className="wallet-flow-step">
+                  <div className="wallet-qr-wrap">
+                    <QrScanIcon className="wallet-qr-icon" />
+                    <span className="wallet-scan-pulse" aria-hidden />
+                  </div>
+                  <span className="wallet-flow-label">Scan once</span>
+                </div>
+
+                <div className="wallet-flow-arrow" aria-hidden>
+                  <svg width="28" height="12" viewBox="0 0 28 12" fill="none">
+                    <path
+                      d="M0 6h20M20 6l-5-4.5M20 6l-5 4.5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+
+                <div className="wallet-platforms">
+                  <div className="wallet-tile">
+                    <div className="wallet-tile-icon">
+                      <img
+                        src="/icons/apple-wallet.png"
+                        alt=""
+                        width={40}
+                        height={40}
+                        className="wallet-app-icon"
+                      />
+                    </div>
+                    <span className="wallet-tile-name">Apple</span>
+                  </div>
+                  <div className="wallet-tile">
+                    <div className="wallet-tile-icon">
+                      <img
+                        src="/icons/google-wallet.png"
+                        alt=""
+                        width={40}
+                        height={40}
+                        className="wallet-app-icon"
+                      />
+                    </div>
+                    <span className="wallet-tile-name">Google</span>
+                  </div>
+                </div>
               </div>
-              <div style={{ width: '1px', height: '40px', background: 'var(--glass-b)' }} />
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '30px', marginBottom: '4px' }}>🤖</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-m)' }}>Google Wallet</div>
-              </div>
+              <p className="wallet-flow-caption">Works on iPhone &amp; Android — no download required</p>
             </div>
           </div>
 
