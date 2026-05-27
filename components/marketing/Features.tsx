@@ -1,36 +1,46 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type ComponentType } from 'react'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
+import {
+  WalletIcon,
+  StampIcon,
+  QrStampIcon,
+  WhatsAppIcon,
+  BirthdayIcon,
+  CrmIcon,
+} from './FeatureIcons'
 
-const features = [
+type FeatureIcon = ComponentType<{ className?: string }>
+
+const features: { icon: FeatureIcon; title: string; desc: string }[] = [
   {
-    icon: '📱',
+    icon: WalletIcon,
     title: 'Apple & Google Wallet',
     desc: "Cards live natively inside your customers' phones. No app to download, no account to create — they just scan and go.",
   },
   {
-    icon: '☕',
+    icon: StampIcon,
     title: 'The 5-Stamp Mechanic',
     desc: 'Collect 5 stamps, earn a free drink. Simple, proven, and psychologically effective. The card resets and stays in their wallet forever.',
   },
   {
-    icon: '📷',
+    icon: QrStampIcon,
     title: 'Instant QR Stamping',
     desc: 'Baristas scan the wallet card barcode with the Stampd app in under a second. One tap — stamp added, notification sent.',
   },
   {
-    icon: '💬',
+    icon: WhatsAppIcon,
     title: 'WhatsApp Campaigns',
     desc: 'Slow Tuesday? Send a personal WhatsApp offer to all your regulars in 2 minutes. Fill empty tables, boost daily revenue.',
   },
   {
-    icon: '🎂',
+    icon: BirthdayIcon,
     title: 'Birthday Automation',
     desc: 'The system automatically sends a birthday offer to every customer on their birthday. Zero effort from you, 30–50% conversion rate.',
   },
   {
-    icon: '📊',
+    icon: CrmIcon,
     title: 'Customer CRM',
     desc: 'Know your regulars by name. Track visit frequency, stamp history, and lifetime value — in one clean dashboard.',
   },
@@ -88,15 +98,19 @@ export default function Features() {
         </div>
 
         <div className="feat-grid">
-          {features.map((f, i) => (
+          {features.map((f, i) => {
+            const Icon = f.icon
+            return (
             <div key={f.title} className={`card rv d${(i % 4) + 1}`}>
               <div className="card-glow" />
               <div className="card-shine" />
-              <div className="card-icon">{f.icon}</div>
+              <div className="card-icon">
+                <Icon />
+              </div>
               <h3 className="card-title">{f.title}</h3>
               <p className="card-desc">{f.desc}</p>
             </div>
-          ))}
+          )})}
         </div>
       </div>
     </section>
