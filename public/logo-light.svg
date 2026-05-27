@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="400" height="100">
+  <g transform="scale(0.35) translate(4,14)">
+    <rect width="256" height="256" rx="52" fill="#4F46E5"/>
+    <ellipse cx="128" cy="208" rx="56" ry="8" fill="#3730A3" opacity="0.5"/>
+    <rect x="44" y="168" width="168" height="24" rx="7" fill="white"/>
+    <rect x="54" y="128" width="148" height="36" rx="6" fill="white"/>
+    <path d="M 118,122 L 138,122 C 160,122 202,128 202,134 L 54,134 C 54,128 96,122 118,122 Z" fill="white"/>
+    <rect x="116" y="92" width="24" height="34" rx="5" fill="white"/>
+    <rect x="99" y="28" width="58" height="68" rx="29" fill="white"/>
+  </g>
+  <text x="106" y="48" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="600" font-size="34" letter-spacing="-0.5">
+    <tspan fill="#1E1B4B">Stamp</tspan><tspan fill="#4F46E5">d</tspan>
+  </text>
+  <text x="106" y="68" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="400" font-size="12" letter-spacing="3" fill="#818CF8">LOYALTY CARDS</text>
+</svg>

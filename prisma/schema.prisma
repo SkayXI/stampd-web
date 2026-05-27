@@ -1,0 +1,169 @@
+// Stampd — Database Schema
+// Run: npx prisma db push
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Coffee Shop Client ───────────────────────────────────────────────────────
+
+model Shop {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique          // used in QR URL: stampd.com/s/[slug]
+  email         String   @unique
+  phone         String?
+  plan          Plan     @default(STARTER)
+  logoUrl       String?
+  brandColor    String   @default("#4F46E5")
+  rewardText    String   @default("Free drink on us!")
+  stampTarget   Int      @default(5)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  customers     Customer[]
+  campaigns     Campaign[]
+  owner         User?    @relation(fields: [ownerId], references: [id])
+  ownerId       String?  @unique
+
+  @@map("shops")
+}
+
+enum Plan {
+  STARTER    // EGP 999/mo
+  GROWTH     // EGP 1,799/mo
+  CHAIN      // EGP 3,499/mo
+  MARKETING  // EGP 4,999/mo
+}
+
+// ─── Shop Owner Auth ──────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  shop      Shop?
+
+  @@map("users")
+}
+
+// ─── Customer (card holder) ───────────────────────────────────────────────────
+
+model Customer {
+  id              String    @id @default(cuid())
+  shopId          String
+  shop            Shop      @relation(fields: [shopId], references: [id])
+
+  // Collected on first scan
+  firstName       String
+  phone           String                      // WhatsApp number
+  birthdayMonth   Int?
+  birthdayDay     Int?
+  whatsappOptIn   Boolean   @default(false)
+
+  // Wallet pass
+  passKitId       String?   @unique           // PassKit pass ID
+  passSerialNo    String?   @unique           // Apple/Google serial
+  stamps          Int       @default(0)
+  totalStamps     Int       @default(0)       // lifetime stamps
+  totalRewards    Int       @default(0)       // lifetime rewards redeemed
+  lastVisitAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  stampEvents     StampEvent[]
+  messagesSent    CampaignRecipient[]
+
+  @@unique([shopId, phone])
+  @@map("customers")
+}
+
+// ─── Stamp Events (audit trail) ───────────────────────────────────────────────
+
+model StampEvent {
+  id          String      @id @default(cuid())
+  customerId  String
+  customer    Customer    @relation(fields: [customerId], references: [id])
+  type        StampType
+  stampsBefore Int
+  stampsAfter  Int
+  baristaNotes String?
+  createdAt   DateTime    @default(now())
+
+  @@map("stamp_events")
+}
+
+enum StampType {
+  STAMP    // normal stamp added
+  REWARD   // reward redeemed, card reset to 0
+  BONUS    // e.g. referral bonus
+}
+
+// ─── WhatsApp Campaigns ────────────────────────────────────────────────────────
+
+model Campaign {
+  id          String           @id @default(cuid())
+  shopId      String
+  shop        Shop             @relation(fields: [shopId], references: [id])
+  type        CampaignType
+  templateId  String           // Meta-approved template name
+  offerText   String?
+  expiresAt   DateTime?
+  sentAt      DateTime?
+  status      CampaignStatus   @default(DRAFT)
+  createdAt   DateTime         @default(now())
+
+  recipients  CampaignRecipient[]
+
+  @@map("campaigns")
+}
+
+enum CampaignType {
+  SLOW_DAY      // manual — owner sends during quiet hours
+  DISCOUNT      // manual — percentage off
+  NEW_ITEM      // manual — new menu announcement
+  BIRTHDAY      // automated — sent on customer birthday
+  MILESTONE     // automated — sent at stamp milestone (e.g. stamp 3 of 5)
+}
+
+enum CampaignStatus {
+  DRAFT
+  SENDING
+  SENT
+  FAILED
+}
+
+model CampaignRecipient {
+  id          String              @id @default(cuid())
+  campaignId  String
+  campaign    Campaign            @relation(fields: [campaignId], references: [id])
+  customerId  String
+  customer    Customer            @relation(fields: [customerId], references: [id])
+  status      RecipientStatus     @default(PENDING)
+  sentAt      DateTime?
+  deliveredAt DateTime?
+  readAt      DateTime?
+  repliedAt   DateTime?
+
+  @@unique([campaignId, customerId])
+  @@map("campaign_recipients")
+}
+
+enum RecipientStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  REPLIED
+  FAILED
+  OPTED_OUT
+}
