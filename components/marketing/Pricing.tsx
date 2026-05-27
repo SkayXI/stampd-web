@@ -1,3 +1,8 @@
+'use client'
+
+import { useRef } from 'react'
+import { useScrollReveal } from '@/hooks/useScrollReveal'
+
 const plans = [
   {
     tier: 'Starter',
@@ -62,8 +67,11 @@ const plans = [
 ]
 
 export default function Pricing() {
+  const sectionRef = useRef<HTMLElement>(null)
+  useScrollReveal(sectionRef)
+
   return (
-    <section className="section" id="pricing">
+    <section className="section" id="pricing" ref={sectionRef}>
       <div className="section-inner">
         <div className="price-head">
           <div className="s-label rv">Simple pricing</div>
